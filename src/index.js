@@ -28,6 +28,12 @@ const useOnEnter = onEnter => {
   });
 };
 
+const updateConfig = (kubeConfig, cluster, contexts, users) => {
+  const config = JSON.parse(JSON.stringify(kubeConfig));
+  config.clusters = config.clusters.filter(c => c.name !== cluster.name);
+  console.log(config.clusters);
+};
+
 const KubeCleaner = () => {
   const [config, setConfig] = React.useState(() => {
     const kubeConfig = path.join(homedir, '.kube/config');
@@ -71,6 +77,7 @@ const KubeCleaner = () => {
   const appContext = React.useContext(AppContext);
   React.useEffect(() => {
     if (deletionConfirmed === true) {
+      updateConfig(config, cluster, relatedContexts, relatedUsers);
       appContext.exit();
     }
   }, [deletionConfirmed]);
