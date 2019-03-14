@@ -2,7 +2,7 @@
   "name": "kube-cleaner",
   "version": "1.0.0",
   "main": "index.js",
-  "bin": "./bin/kube-cleaner",
+  "bin": "bin/kube-cleaner.js",
   "repository": "https://github.com/ivx/kube-cleaner.git",
   "author": "Daniel Heitmann <dh@ivx.com>",
   "license": "MIT",
