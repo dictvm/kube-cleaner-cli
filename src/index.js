@@ -1,53 +1,53 @@
-'use strict';
-const React = require('react');
-const {AppContext, StdinContext, render, Color, Box, Text} = require('ink');
-const yml = require('js-yaml');
-const fs = require('fs');
-const homedir = require('os').homedir();
-const path = require('path');
-const SelectInput = require('ink-select-input').default;
-const TextInput = require('ink-text-input').default;
+"use strict";
+const React = require("react");
+const { AppContext, StdinContext, render, Color, Box, Text } = require("ink");
+const yml = require("js-yaml");
+const fs = require("fs");
+const homedir = require("os").homedir();
+const path = require("path");
+const SelectInput = require("ink-select-input").default;
+const TextInput = require("ink-text-input").default;
 
 const useOnEnter = onEnter => {
-  const {stdin} = React.useContext(StdinContext);
+  const { stdin } = React.useContext(StdinContext);
 
   React.useEffect(() => {
     const onData = data => {
       const s = data.toString();
 
-      if (s === '\r') {
+      if (s === "\r") {
         onEnter();
       }
     };
 
-    stdin.on('data', onData);
+    stdin.on("data", onData);
 
     return () => {
-      stdin.off('data', onData);
+      stdin.off("data", onData);
     };
   });
 };
 
 const updateConfig = (kubeConfig, cluster, contexts, users) => {
   const config = JSON.parse(JSON.stringify(kubeConfig));
+  const contextNames = contexts.map(context => context.name);
+  const userNames = users.map(user => user.name);
+
   config.clusters = config.clusters.filter(c => c.name !== cluster.name);
-  // contexts.forEach(context => {
-    config.contexts ==
-      config.contexts.filter(c => {
-        console.log(c.name, context.name);
-        return c.name !== context.name;
-      });
-  // });
-  users.forEach(user => {
-    config.users == config.users.filter(u => u.name !== user.name);
+  config.contexts = config.contexts.filter(context => {
+    return !contextNames.includes(context.name);
   });
-  console.log(config.contexts);
+  config.users = config.users.filter(user => {
+    return !userNames.includes(user.name);
+  });
+
+  return config;
 };
 
 const KubeCleaner = () => {
   const [config, setConfig] = React.useState(() => {
-    const kubeConfig = path.join(homedir, '.kube/config');
-    const kubeContent = fs.readFileSync(kubeConfig, 'utf8');
+    const kubeConfig = path.join(homedir, ".kube/config");
+    const kubeContent = fs.readFileSync(kubeConfig, "utf8");
     const parsedConfig = yml.safeLoad(kubeContent);
     return parsedConfig;
   });
@@ -76,11 +76,11 @@ const KubeCleaner = () => {
     return {
       label: cluster.name,
       value: cluster.name,
-      cluster: cluster,
+      cluster: cluster
     };
   });
 
-  const [confirmationText, setConfirmationText] = React.useState('');
+  const [confirmationText, setConfirmationText] = React.useState("");
 
   const [deletionConfirmed, setDeletionConfirmed] = React.useState(false);
 
@@ -104,14 +104,14 @@ const KubeCleaner = () => {
             users={relatedUsers}
           />
           <Box marginTop={1}>
-            Confirm deletion y/n:{' '}
+            Confirm deletion y/n:{" "}
             <TextInputWithEnter
               value={confirmationText}
               onChange={query => {
                 setConfirmationText(query);
               }}
               onSubmit={() => {
-                if (confirmationText === 'y') {
+                if (confirmationText === "y") {
                   setDeletionConfirmed(true);
                 }
               }}
@@ -126,23 +126,23 @@ const KubeCleaner = () => {
   );
 };
 
-const TextInputWithEnter = ({value, onChange, onSubmit}) => {
+const TextInputWithEnter = ({ value, onChange, onSubmit }) => {
   useOnEnter(() => {
     onSubmit();
   });
   return <TextInput value={value} onChange={onChange} />;
 };
 
-const ClusterRelationships = ({cluster, contexts, users}) => {
+const ClusterRelationships = ({ cluster, contexts, users }) => {
   return (
     <Box flexDirection="column">
       <Box>
         selected cluster: <Color green>{cluster.name}</Color>
       </Box>
       <Box paddingLeft={2}>
-        context:{' '}
+        context:{" "}
         {contexts.map((context, i) => {
-          const separator = i === contexts.length - 1 ? '' : ', ';
+          const separator = i === contexts.length - 1 ? "" : ", ";
           return (
             <Text key={i}>
               <Color green>{context.name}</Color>
@@ -152,9 +152,9 @@ const ClusterRelationships = ({cluster, contexts, users}) => {
         })}
       </Box>
       <Box paddingLeft={2}>
-        user:{' '}
+        user:{" "}
         {users.map((user, i) => {
-          const separator = i === users.length - 1 ? '' : ', ';
+          const separator = i === users.length - 1 ? "" : ", ";
           return (
             <Text key={i}>
               <Color green>{user.name}</Color>
