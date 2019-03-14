@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-"use strict";
+'use strict';
 
-const importJsx = require("import-jsx");
-process.env.FORCE_COLOR = "1";
-importJsx("../src/index");
+const importJsx = require('import-jsx');
+process.env.FORCE_COLOR = '1';
+importJsx('../src/KubeCleaner');
