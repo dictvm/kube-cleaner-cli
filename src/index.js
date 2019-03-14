@@ -1,28 +1,32 @@
 'use strict';
 const React = require('react');
-const {render, Color, Box, Text} = require('ink');
+const {AppContext, StdinContext, render, Color, Box, Text} = require('ink');
 const yml = require('js-yaml');
 const fs = require('fs');
 const homedir = require('os').homedir();
 const path = require('path');
 const SelectInput = require('ink-select-input').default;
+const TextInput = require('ink-text-input').default;
 
-// function useInterval(callback, delay) {
-//   const savedCallback = React.useRef();
+const useOnEnter = onEnter => {
+  const {stdin} = React.useContext(StdinContext);
 
-//   React.useEffect(() => {
-//     savedCallback.current = callback;
-//   });
+  React.useEffect(() => {
+    const onData = data => {
+      const s = data.toString();
 
-//   React.useEffect(() => {
-//     function tick() {
-//       savedCallback.current();
-//     }
+      if (s === '\r') {
+        onEnter();
+      }
+    };
 
-//     let id = setInterval(tick, delay);
-//     return () => clearInterval(id);
-//   }, [delay]);
-// }
+    stdin.on('data', onData);
+
+    return () => {
+      stdin.off('data', onData);
+    };
+  });
+};
 
 const KubeCleaner = () => {
   const [config, setConfig] = React.useState(() => {
@@ -46,19 +50,56 @@ const KubeCleaner = () => {
     };
   });
 
+  const [confirmationText, setConfirmationText] = React.useState('');
+
+  const [deletionConfirmed, setDeletionConfirmed] = React.useState(false);
+
+  const appContext = React.useContext(AppContext);
+  React.useEffect(() => {
+    if (deletionConfirmed === true) {
+      appContext.exit();
+    }
+  }, [deletionConfirmed]);
+
   return (
     <Box>
       {cluster == null ? (
         <SelectInput items={clusterOptions} onSelect={handleClusterSelect} />
       ) : (
-        <ClusterRelationships
-          cluster={cluster}
-          contexts={config.contexts}
-          users={config.users}
-        />
+        <Box flexDirection="column">
+          <ClusterRelationships
+            cluster={cluster}
+            contexts={config.contexts}
+            users={config.users}
+          />
+          <Box marginTop={1}>
+            Confirm deletion y/n:{' '}
+            <TextInputWithEnter
+              value={confirmationText}
+              onChange={query => {
+                setConfirmationText(query);
+              }}
+              onSubmit={() => {
+                if (confirmationText === 'y') {
+                  setDeletionConfirmed(true);
+                }
+              }}
+            />
+          </Box>
+          {deletionConfirmed === true ? (
+            <Box>Cluster {cluster.name} has been deleted.</Box>
+          ) : null}
+        </Box>
       )}
     </Box>
   );
+};
+
+const TextInputWithEnter = ({value, onChange, onSubmit}) => {
+  useOnEnter(() => {
+    onSubmit();
+  });
+  return <TextInput value={value} onChange={onChange} />;
 };
 
 const ClusterRelationships = ({cluster, contexts, users}) => {
@@ -75,19 +116,20 @@ const ClusterRelationships = ({cluster, contexts, users}) => {
       <Box>
         selected cluster: <Color green>{cluster.name}</Color>
       </Box>
-      <Box>
-        related context:{' '}
+      <Box paddingLeft={2}>
+        context:{' '}
         {relatedContexts.map((context, i) => {
           const separator = i === relatedContexts.length - 1 ? '' : ', ';
           return (
             <Text key={i}>
-              <Color green>{context.name}</Color>{separator}
+              <Color green>{context.name}</Color>
+              {separator}
             </Text>
           );
         })}
       </Box>
-      <Box>
-        related user:{' '}
+      <Box paddingLeft={2}>
+        user:{' '}
         {relatedUsers.map((user, i) => {
           const separator = i === relatedUsers.length - 1 ? '' : ', ';
           return (
