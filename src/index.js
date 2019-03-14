@@ -31,7 +31,17 @@ const useOnEnter = onEnter => {
 const updateConfig = (kubeConfig, cluster, contexts, users) => {
   const config = JSON.parse(JSON.stringify(kubeConfig));
   config.clusters = config.clusters.filter(c => c.name !== cluster.name);
-  console.log(config.clusters);
+  // contexts.forEach(context => {
+    config.contexts ==
+      config.contexts.filter(c => {
+        console.log(c.name, context.name);
+        return c.name !== context.name;
+      });
+  // });
+  users.forEach(user => {
+    config.users == config.users.filter(u => u.name !== user.name);
+  });
+  console.log(config.contexts);
 };
 
 const KubeCleaner = () => {
