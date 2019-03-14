@@ -42,6 +42,20 @@ const KubeCleaner = () => {
     setCluster(item.cluster);
   };
 
+  const relatedContexts =
+    cluster === null
+      ? []
+      : config.contexts.filter(context => {
+          return context.context.cluster === cluster.name;
+        });
+
+  const relatedUsers =
+    cluster === null
+      ? []
+      : config.users.filter(user => {
+          return user.name.startsWith(cluster.name);
+        });
+
   const clusterOptions = config.clusters.map(cluster => {
     return {
       label: cluster.name,
@@ -69,8 +83,8 @@ const KubeCleaner = () => {
         <Box flexDirection="column">
           <ClusterRelationships
             cluster={cluster}
-            contexts={config.contexts}
-            users={config.users}
+            contexts={relatedContexts}
+            users={relatedUsers}
           />
           <Box marginTop={1}>
             Confirm deletion y/n:{' '}
@@ -103,14 +117,6 @@ const TextInputWithEnter = ({value, onChange, onSubmit}) => {
 };
 
 const ClusterRelationships = ({cluster, contexts, users}) => {
-  const relatedContexts = contexts.filter(context => {
-    return context.context.cluster === cluster.name;
-  });
-
-  const relatedUsers = users.filter(user => {
-    return user.name.startsWith(cluster.name);
-  });
-
   return (
     <Box flexDirection="column">
       <Box>
@@ -118,8 +124,8 @@ const ClusterRelationships = ({cluster, contexts, users}) => {
       </Box>
       <Box paddingLeft={2}>
         context:{' '}
-        {relatedContexts.map((context, i) => {
-          const separator = i === relatedContexts.length - 1 ? '' : ', ';
+        {contexts.map((context, i) => {
+          const separator = i === contexts.length - 1 ? '' : ', ';
           return (
             <Text key={i}>
               <Color green>{context.name}</Color>
@@ -130,8 +136,8 @@ const ClusterRelationships = ({cluster, contexts, users}) => {
       </Box>
       <Box paddingLeft={2}>
         user:{' '}
-        {relatedUsers.map((user, i) => {
-          const separator = i === relatedUsers.length - 1 ? '' : ', ';
+        {users.map((user, i) => {
+          const separator = i === users.length - 1 ? '' : ', ';
           return (
             <Text key={i}>
               <Color green>{user.name}</Color>
