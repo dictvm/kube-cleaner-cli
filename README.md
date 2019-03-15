@@ -8,7 +8,7 @@ regularly. By doing so, your clusters get a new name for each major update.
 
 If you do this for a couple of Kubernetes releases, you will end up with a lot
 of clusters in your `kubectl` config. Of course you can
-(manually clean them up)[https://stackoverflow.com/questions/37016546/how-do-i-delete-clusters-and-contexts-from-kubectl-config] or open your `$HOME/.kube/config` in your text editor, but you're not from the stone age, are you?
+[manually clean them up](https://stackoverflow.com/questions/37016546/how-do-i-delete-clusters-and-contexts-from-kubectl-config) or open your `$HOME/.kube/config` in your text editor, but you're not from the stone age, are you?
 
 Here `kube-cleaner` comes to your rescue!
 
