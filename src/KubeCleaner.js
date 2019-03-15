@@ -75,12 +75,25 @@ const KubeCleaner = () => {
                 if (confirmationText === 'y') {
                   setDeletionConfirmed(true);
                 }
+                switch (confirmationText) {
+                  case 'y':
+                    return setDeletionConfirmed(true);
+                  case 'n':
+                    setDeletionConfirmed(false);
+                    setConfirmationText('');
+                    return setCluster(null);
+                  default:
+                    setDeletionConfirmed(null);
+                    setConfirmationText('');
+                    return;
+                }
               }}
             />
           </Box>
           {deletionConfirmed === true ? (
             <Box>Cluster {cluster.name} has been deleted.</Box>
           ) : null}
+          {deletionConfirmed === null ? <Box>Invalid input.</Box> : null}
         </Box>
       )}
     </Box>
