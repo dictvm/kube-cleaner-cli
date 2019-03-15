@@ -18,6 +18,19 @@ const KubeCleaner = () => {
     false,
   );
 
+  useEffect(() => {
+    if (deletionConfirmed === true && cluster !== null) {
+      const updatedConfig = updateConfig(
+        config,
+        cluster,
+        relatedContexts,
+        relatedUsers,
+      );
+      writeConfig(updatedConfig);
+      appContext.exit();
+    }
+  }, [deletionConfirmed]);
+
   const relatedContexts =
     cluster === null
       ? []
@@ -36,18 +49,9 @@ const KubeCleaner = () => {
     cluster: cluster,
   }));
 
-  useEffect(() => {
-    if (deletionConfirmed === true && cluster !== null) {
-      const updatedConfig = updateConfig(
-        config,
-        cluster,
-        relatedContexts,
-        relatedUsers,
-      );
-      writeConfig(updatedConfig);
-      appContext.exit();
-    }
-  }, [deletionConfirmed]);
+  if (clusterOptions.length === 0) {
+    return <Box>No clusters found in the config</Box>;
+  }
 
   return (
     <Box>
