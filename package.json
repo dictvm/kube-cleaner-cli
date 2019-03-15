@@ -11,6 +11,9 @@
     "prepublishOnly": "tsc --build",
     "dev": "tsc --build --watch"
   },
+  "files": [
+    "dist/", "bin/"
+  ],
   "dependencies": {
     "ink": "^2.0.5",
     "ink-select-input": "^3.1.0",
