@@ -18,19 +18,6 @@ const KubeCleaner = () => {
     false,
   );
 
-  useEffect(() => {
-    if (deletionConfirmed === true && cluster !== null) {
-      const updatedConfig = updateConfig(
-        config,
-        cluster,
-        relatedContexts,
-        relatedUsers,
-      );
-      writeConfig(updatedConfig);
-      appContext.exit();
-    }
-  }, [deletionConfirmed]);
-
   const relatedContexts =
     cluster === null
       ? []
@@ -42,6 +29,26 @@ const KubeCleaner = () => {
     cluster === null
       ? []
       : config.users.filter(user => user.name.startsWith(cluster.name));
+
+  useEffect(() => {
+    if (deletionConfirmed === true && cluster !== null) {
+      const updatedConfig = updateConfig(
+        config,
+        cluster,
+        relatedContexts,
+        relatedUsers,
+      );
+      writeConfig(updatedConfig);
+      appContext.exit();
+    }
+  }, [
+    deletionConfirmed,
+    cluster,
+    config,
+    relatedContexts,
+    relatedUsers,
+    appContext,
+  ]);
 
   const clusterOptions = config.clusters.map(cluster => ({
     label: cluster.name,
