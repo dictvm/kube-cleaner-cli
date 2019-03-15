@@ -1,6 +1,6 @@
 {
   "name": "kube-cleaner",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "index.js",
   "bin": "bin/kube-cleaner.js",
   "repository": "https://github.com/ivx/kube-cleaner.git",
@@ -12,7 +12,8 @@
     "dev": "tsc --build --watch"
   },
   "files": [
-    "dist/", "bin/"
+    "dist/",
+    "bin/"
   ],
   "dependencies": {
     "ink": "^2.0.5",
