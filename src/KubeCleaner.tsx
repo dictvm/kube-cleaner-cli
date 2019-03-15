@@ -28,7 +28,11 @@ export const KubeCleaner = () => {
   const relatedUsers =
     cluster === null
       ? []
-      : config.users.filter(user => user.name.startsWith(cluster.name));
+      : config.users.filter(
+          user =>
+            user.name.startsWith(cluster.name) ||
+            cluster.name.startsWith(user.name),
+        );
 
   useEffect(() => {
     if (deletionConfirmed === true && cluster !== null) {
