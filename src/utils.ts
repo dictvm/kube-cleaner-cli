@@ -4,7 +4,7 @@ import os from 'os';
 import path from 'path';
 import { Cluster, Context, User, Config } from './types';
 
-const kubeConfigPath = path.join(os.homedir(), '.kube/config');
+const kubeConfigPath = path.join(os.homedir(), '.kube', 'config');
 
 export const updateConfig = (
   kubeConfig: Config,
@@ -12,19 +12,15 @@ export const updateConfig = (
   contexts: Context[],
   users: User[],
 ): Config => {
-  const config = JSON.parse(JSON.stringify(kubeConfig));
+  const config: Config = JSON.parse(JSON.stringify(kubeConfig));
   const contextNames = contexts.map((context: Context) => context.name);
   const userNames = users.map(user => user.name);
 
-  config.clusters = config.clusters.filter(
-    (c: Cluster) => c.name !== cluster.name,
+  config.clusters = config.clusters.filter(c => c.name !== cluster.name);
+  config.contexts = config.contexts.filter(
+    context => !contextNames.includes(context.name),
   );
-  config.contexts = config.contexts.filter(context => {
-    return !contextNames.includes(context.name);
-  });
-  config.users = config.users.filter(user => {
-    return !userNames.includes(user.name);
-  });
+  config.users = config.users.filter(user => !userNames.includes(user.name));
 
   return config;
 };
