@@ -18,6 +18,7 @@
     "react": "^16.8.4"
   },
   "devDependencies": {
+    "ink-testing-library": "^1.0.1",
     "prettier": "^1.16.4"
   }
 }

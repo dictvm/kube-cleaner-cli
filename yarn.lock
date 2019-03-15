@@ -424,6 +424,11 @@ ink-select-input@^3.1.0:
     lodash.isequal "^4.5.0"
     prop-types "^15.5.10"
 
+ink-testing-library@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/ink-testing-library/-/ink-testing-library-1.0.1.tgz#6a068997e66522c88b58c5ff65181faf5b932f88"
+  integrity sha512-RT/JU1NDcf3XdSWsN9kcJHEd6zX5Sb4kt5SFlfnJiKIzt2xdPdbWCrhBdEOFtdP9Nu282HU3AJ1zt7yYUpyljw==
+
 ink-text-input@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/ink-text-input/-/ink-text-input-3.0.0.tgz#711691b8e9d3b46089ea2807a6f3f96d6e60b409"
