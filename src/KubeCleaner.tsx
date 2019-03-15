@@ -50,15 +50,15 @@ const KubeCleaner = () => {
     appContext,
   ]);
 
+  if (config.clusters.length === 0) {
+    return <Box>No clusters found in the config</Box>;
+  }
+
   const clusterOptions = config.clusters.map(cluster => ({
     label: cluster.name,
     value: cluster.name,
     cluster: cluster,
   }));
-
-  if (clusterOptions.length === 0) {
-    return <Box>No clusters found in the config</Box>;
-  }
 
   return (
     <Box>
