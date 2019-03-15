@@ -1,0 +1,16 @@
+apiVersion: v1
+clusters:
+  - cluster:
+      insecure-skip-tls-verify: true
+      server: 'https://localhost:6443'
+    name: docker-for-desktop-cluster
+contexts:
+  - context:
+      cluster: docker-for-desktop-cluster
+      user: docker-for-desktop
+    name: docker-for-desktop
+current-context: docker-for-desktop
+kind: Config
+preferences: {}
+users:
+  - name: docker-for-desktop

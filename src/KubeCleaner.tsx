@@ -7,7 +7,7 @@ import ClusterRelationships from './ClusterRelationships';
 import { updateConfig, writeConfig, loadConfig } from './utils';
 import { Cluster } from './types';
 
-const KubeCleaner = () => {
+export const KubeCleaner = () => {
   const appContext = useContext(AppContext);
 
   const [config] = useState(() => loadConfig());
