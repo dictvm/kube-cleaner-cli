@@ -12,6 +12,10 @@ of clusters in your `kubectl` config. Of course you can
 
 Here `kube-cleaner` comes to your rescue!
 
+![screenshot showing first output of the applicaton](docs/first.png 'first screenshot')
+
+![screenshot showing second output of the applicaton](docs/second.png 'second screenshot')
+
 ### Install
 
 `yarn global add kube-cleaner`
