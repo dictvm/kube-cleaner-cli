@@ -2,6 +2,7 @@
 
 'use strict';
 
-const importJsx = require('import-jsx');
+const { start } = require('../dist/KubeCleaner');
+
 process.env.FORCE_COLOR = '1';
-importJsx('../src/KubeCleaner');
+start();

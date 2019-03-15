@@ -1,8 +1,12 @@
-'use strict';
-const React = require('react');
-const { Color, Box, Text } = require('ink');
+import React from 'react';
+import { Color, Box, Text } from 'ink';
+import { Cluster, Context, User } from './types';
 
-const ClusterRelationships = ({ cluster, contexts, users }) => {
+const ClusterRelationships: React.FC<{
+  cluster: Cluster;
+  contexts: Context[];
+  users: User[];
+}> = ({ cluster, contexts, users }) => {
   return (
     <Box flexDirection="column">
       <Box>
@@ -36,4 +40,4 @@ const ClusterRelationships = ({ cluster, contexts, users }) => {
   );
 };
 
-module.exports = ClusterRelationships;
+export default ClusterRelationships;

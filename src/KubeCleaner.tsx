@@ -1,21 +1,22 @@
-'use strict';
-const React = require('react');
-const importJsx = require('import-jsx');
-const { AppContext, render, Box } = require('ink');
-const SelectInput = require('ink-select-input').default;
-const TextInputWithEnter = importJsx('./TextInputWithEnter');
-const ClusterRelationships = importJsx('./ClusterRelationships');
+import React, { useContext, useState, useEffect } from 'react';
+import { AppContext, render, Box } from 'ink';
+import SelectInput from 'ink-select-input';
+import TextInputWithEnter from './TextInputWithEnter';
+import ClusterRelationships from './ClusterRelationships';
 
-const { updateConfig, writeConfig, loadConfig } = require('./utils');
+import { updateConfig, writeConfig, loadConfig } from './utils';
+import { Cluster } from './types';
 
 const KubeCleaner = () => {
-  const appContext = React.useContext(AppContext);
+  const appContext = useContext(AppContext);
 
-  const [config] = React.useState(() => loadConfig());
+  const [config] = useState(() => loadConfig());
 
-  const [cluster, setCluster] = React.useState(null);
-  const [confirmationText, setConfirmationText] = React.useState('');
-  const [deletionConfirmed, setDeletionConfirmed] = React.useState(false);
+  const [cluster, setCluster] = useState<null | Cluster>(null);
+  const [confirmationText, setConfirmationText] = useState('');
+  const [deletionConfirmed, setDeletionConfirmed] = useState<boolean | null>(
+    false,
+  );
 
   const relatedContexts =
     cluster === null
@@ -35,8 +36,8 @@ const KubeCleaner = () => {
     cluster: cluster,
   }));
 
-  React.useEffect(() => {
-    if (deletionConfirmed === true) {
+  useEffect(() => {
+    if (deletionConfirmed === true && cluster !== null) {
       const updatedConfig = updateConfig(
         config,
         cluster,
@@ -100,4 +101,4 @@ const KubeCleaner = () => {
   );
 };
 
-render(<KubeCleaner />);
+export const start = () => render(<KubeCleaner />);
