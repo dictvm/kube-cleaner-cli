@@ -84,9 +84,6 @@ const KubeCleaner = () => {
                 setConfirmationText(query);
               }}
               onSubmit={() => {
-                if (confirmationText === 'y') {
-                  setDeletionConfirmed(true);
-                }
                 switch (confirmationText) {
                   case 'y':
                     return setDeletionConfirmed(true);

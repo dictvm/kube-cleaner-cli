@@ -2,16 +2,16 @@ import yml from 'js-yaml';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { Cluster, Context, User } from './types';
+import { Cluster, Context, User, Config } from './types';
 
 const kubeConfigPath = path.join(os.homedir(), '.kube/config');
 
 export const updateConfig = (
-  kubeConfig: any,
+  kubeConfig: Config,
   cluster: Cluster,
   contexts: Context[],
   users: User[],
-) => {
+): Config => {
   const config = JSON.parse(JSON.stringify(kubeConfig));
   const contextNames = contexts.map((context: Context) => context.name);
   const userNames = users.map(user => user.name);
@@ -19,22 +19,22 @@ export const updateConfig = (
   config.clusters = config.clusters.filter(
     (c: Cluster) => c.name !== cluster.name,
   );
-  config.contexts = config.contexts.filter((context: Context) => {
+  config.contexts = config.contexts.filter(context => {
     return !contextNames.includes(context.name);
   });
-  config.users = config.users.filter((user: User) => {
+  config.users = config.users.filter(user => {
     return !userNames.includes(user.name);
   });
 
   return config;
 };
 
-export const loadConfig = () => {
+export const loadConfig = (): Config => {
   const kubeContent = fs.readFileSync(kubeConfigPath, 'utf8');
   return yml.safeLoad(kubeContent);
 };
 
-export const writeConfig = (config: any) => {
+export const writeConfig = (config: Config) => {
   const yamlConfig = yml.safeDump(config);
   fs.writeFileSync(kubeConfigPath, yamlConfig, 'utf8');
 };
