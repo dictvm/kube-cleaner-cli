@@ -11,6 +11,7 @@ export const updateConfig = (
   cluster: Cluster,
   contexts: Context[],
   users: User[],
+  newCurrentContext: Cluster | null,
 ): Config => {
   const config: Config = JSON.parse(JSON.stringify(kubeConfig));
   const contextNames = contexts.map((context: Context) => context.name);
@@ -21,7 +22,11 @@ export const updateConfig = (
     context => !contextNames.includes(context.name),
   );
   if (config['current-context'] === cluster.name) {
-    delete config['current-context'];
+    if (newCurrentContext === null) {
+      delete config['current-context'];
+    } else {
+      config['current-context'] = newCurrentContext.name;
+    }
   }
   config.users = config.users.filter(user => !userNames.includes(user.name));
 

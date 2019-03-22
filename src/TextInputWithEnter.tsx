@@ -1,5 +1,5 @@
 import React from 'react';
-import { StdinContext } from 'ink';
+import { StdinContext, Text } from 'ink';
 import TextInput from 'ink-text-input';
 
 const useOnEnter = (onEnter: () => any) => {
@@ -26,10 +26,12 @@ const TextInputWithEnter: React.FC<{
   value: string;
   onChange: (value: string) => any;
   onSubmit: () => any;
-}> = ({ value, onChange, onSubmit }) => {
+  readOnly?: boolean;
+}> = ({ value, onChange, onSubmit, readOnly }) => {
   useOnEnter(() => {
-    onSubmit();
+    if (!readOnly) onSubmit();
   });
+  if (readOnly) return <Text>{value}</Text>;
   return <TextInput value={value} onChange={onChange} />;
 };
 

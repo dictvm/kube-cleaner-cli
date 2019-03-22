@@ -12,6 +12,9 @@ export const KubeCleaner = () => {
   const [config] = useState(() => loadConfig());
 
   const [cluster, setCluster] = useState<null | Cluster>(null);
+  const [newCurrentContext, setNewCurrentContext] = useState<null | Cluster>(
+    null,
+  );
   const [confirmationText, setConfirmationText] = useState('');
   const [deletionConfirmed, setDeletionConfirmed] = useState<boolean | null>(
     false,
@@ -42,13 +45,25 @@ export const KubeCleaner = () => {
         cluster,
         relatedContexts,
         relatedUsers,
+        newCurrentContext,
       );
-      writeConfig(updatedConfig);
-      appContext.exit();
+      if (currentContext !== cluster.name) {
+        writeConfig(updatedConfig);
+        appContext.exit();
+      } else {
+        if (
+          newCurrentContext !== null ||
+          remainingClusterOptions.length === 0
+        ) {
+          writeConfig(updatedConfig);
+          appContext.exit();
+        }
+      }
     }
   }, [
     deletionConfirmed,
     cluster,
+    newCurrentContext,
     config,
     relatedContexts,
     relatedUsers,
@@ -64,6 +79,10 @@ export const KubeCleaner = () => {
     value: cluster.name,
     cluster: cluster,
   }));
+
+  const remainingClusterOptions = clusterOptions.filter(option =>
+    cluster ? option.label !== cluster.name : true,
+  );
 
   return (
     <Box>
@@ -86,6 +105,7 @@ export const KubeCleaner = () => {
             Confirm deletion y/n:{' '}
             <TextInputWithEnter
               value={confirmationText}
+              readOnly={deletionConfirmed === true}
               onChange={query => {
                 setConfirmationText(query);
               }}
@@ -108,13 +128,18 @@ export const KubeCleaner = () => {
           {deletionConfirmed === true ? (
             <Box flexDirection="column">
               <Box>Cluster {cluster.name} has been deleted.</Box>
-              {cluster.name === currentContext ? (
+              {cluster.name === currentContext &&
+              remainingClusterOptions.length > 0 ? (
                 <Box>
-                  The deleted cluster was also your current context. Use{' '}
-                  <Color blue>
-                    kubectl config set current-context $cluster-name
-                  </Color>{' '}
-                  to set a new default context.
+                  Select new current context from remaining clusters:
+                  <Box paddingLeft={1}>
+                    <SelectInput
+                      items={remainingClusterOptions}
+                      onSelect={item => {
+                        setNewCurrentContext(item.cluster);
+                      }}
+                    />
+                  </Box>
                 </Box>
               ) : null}
             </Box>
