@@ -1,9 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { AppContext, render, Box } from 'ink';
+import { AppContext, Color, render, Box } from 'ink';
 import SelectInput from 'ink-select-input';
 import TextInputWithEnter from './TextInputWithEnter';
 import ClusterRelationships from './ClusterRelationships';
-
 import { updateConfig, writeConfig, loadConfig } from './utils';
 import { Cluster } from './types';
 
@@ -33,6 +32,8 @@ export const KubeCleaner = () => {
             user.name.startsWith(cluster.name) ||
             cluster.name.startsWith(user.name),
         );
+
+  const currentContext = config['current-context'];
 
   useEffect(() => {
     if (deletionConfirmed === true && cluster !== null) {
@@ -79,6 +80,7 @@ export const KubeCleaner = () => {
             cluster={cluster}
             contexts={relatedContexts}
             users={relatedUsers}
+            currentContext={currentContext}
           />
           <Box marginTop={1}>
             Confirm deletion y/n:{' '}
@@ -104,7 +106,18 @@ export const KubeCleaner = () => {
             />
           </Box>
           {deletionConfirmed === true ? (
-            <Box>Cluster {cluster.name} has been deleted.</Box>
+            <Box flexDirection="column">
+              <Box>Cluster {cluster.name} has been deleted.</Box>
+              {cluster.name === currentContext ? (
+                <Box>
+                  The deleted cluster was also your current context. Use{' '}
+                  <Color blue>
+                    kubectl config set current-context $cluster-name
+                  </Color>{' '}
+                  to set a new default context.
+                </Box>
+              ) : null}
+            </Box>
           ) : null}
           {deletionConfirmed === null ? <Box>Invalid input.</Box> : null}
         </Box>

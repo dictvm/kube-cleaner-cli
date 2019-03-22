@@ -1,16 +1,20 @@
 import React from 'react';
 import { Color, Box, Text } from 'ink';
-import { Cluster, Context, User } from './types';
+import { Cluster, Context, User, CurrentContext } from './types';
 
 const ClusterRelationships: React.FC<{
   cluster: Cluster;
   contexts: Context[];
   users: User[];
-}> = ({ cluster, contexts, users }) => {
+  currentContext: CurrentContext;
+}> = ({ cluster, contexts, users, currentContext }) => {
   return (
     <Box flexDirection="column">
       <Box>
         selected cluster: <Color green>{cluster.name}</Color>
+      </Box>
+      <Box>
+        current context: <Color green>{currentContext}</Color>
       </Box>
       <Box paddingLeft={2}>
         context:{' '}

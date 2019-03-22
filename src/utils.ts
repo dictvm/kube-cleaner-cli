@@ -20,6 +20,9 @@ export const updateConfig = (
   config.contexts = config.contexts.filter(
     context => !contextNames.includes(context.name),
   );
+  if (config['current-context'] === cluster.name) {
+    delete config['current-context'];
+  }
   config.users = config.users.filter(user => !userNames.includes(user.name));
 
   return config;

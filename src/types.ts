@@ -13,8 +13,11 @@ export interface Context {
   };
 }
 
+export type CurrentContext = string;
+
 export interface Config {
   clusters: Cluster[];
   users: User[];
   contexts: Context[];
+  'current-context': CurrentContext;
 }
