@@ -89,7 +89,7 @@ export const KubeCleaner = () => {
       {cluster == null ? (
         <SelectInput
           items={clusterOptions}
-          onSelect={item => {
+          onSelect={(item:any) => {
             setCluster(item.cluster);
           }}
         />
@@ -135,7 +135,7 @@ export const KubeCleaner = () => {
                   <Box paddingLeft={1}>
                     <SelectInput
                       items={remainingClusterOptions}
-                      onSelect={item => {
+                      onSelect={(item:any) => {
                         setNewCurrentContext(item.cluster);
                       }}
                     />
