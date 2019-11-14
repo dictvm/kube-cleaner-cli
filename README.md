@@ -1,6 +1,6 @@
-## Kube-Cleaner
+## Kubernetes Config File cleanup CLI tool
 
-`kube-cleaner` is a utility to keep your kubectl config-file in check.
+`kube-cleaner-cli` is a utility to keep your kubectl config-file in check.
 
 Let's say you're using `kops` to manage Kubernetes clusters on AWS. You're not
 upgrading your clusters in-place but instead, you replace your clusters
