@@ -1,10 +1,10 @@
 {
   "name": "kube-cleaner",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "main": "index.js",
   "bin": "bin/kube-cleaner.js",
-  "repository": "https://github.com/ivx/kube-cleaner.git",
-  "author": "Daniel Heitmann <dh@ivx.com>",
+  "repository": "https://github.com/dictvm/kube-cleaner.git",
+  "author": "Daniel Heitmann <dictvm@dictvm.org>",
   "license": "MIT",
   "scripts": {
     "start": "./bin/kube-cleaner.js",
